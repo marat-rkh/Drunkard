@@ -26,7 +26,7 @@ public class Field {
         for(int i = 0; i < width; i++) {
             ArrayList<Sector> row = new ArrayList<Sector>();
             for(int j = 0; j < height; j++) {
-                row.add(new Sector(i, j, null));
+                row.add(new Sector(null));
             }
             sectors.add(row);
         }

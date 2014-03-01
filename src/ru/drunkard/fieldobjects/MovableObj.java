@@ -13,7 +13,7 @@ abstract public class MovableObj implements IMovableObj {
     protected int x;
     protected int y;
 
-    public MovableObj(int x, int y) {
+    protected MovableObj(int x, int y) {
         this.x = x;
         this.y = y;
     }
@@ -29,13 +29,13 @@ abstract public class MovableObj implements IMovableObj {
         }
     }
 
-    public boolean outOfBorders(DirectionVector directionVector, Field field) {
+    protected boolean outOfBorders(DirectionVector directionVector, Field field) {
         int new_x = x + directionVector.dx;
         int new_y = y + directionVector.dy;
         return new_x >= field.getWidth() || new_y >= field.getHeight() || new_x < 0 || new_y < 0;
     }
 
-    public boolean sectorIsEmpty(DirectionVector directionVector, Field field) {
+    protected boolean sectorIsEmpty(DirectionVector directionVector, Field field) {
         return field.sectorIsEmpty(x + directionVector.dx, y + directionVector.dy);
     }
 
