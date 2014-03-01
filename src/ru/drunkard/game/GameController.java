@@ -26,11 +26,10 @@ public class GameController {
         gameField.addNewObject(column);
     }
 
-    public void startGame(int delay) {
+    public void startGame(int maxSteps, int delay) {
         GamePrinter printer = new GamePrinter();
-        while(true) {
+        for(; gameStepNumber < maxSteps; gameStepNumber++) {
             makeGameStep();
-            ++gameStepNumber;
             printer.printField(gameStepNumber, gameField, TAVERN_X, TAVERN_Y);
             try {
                 Thread.sleep(delay);

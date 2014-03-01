@@ -7,6 +7,6 @@ public class DrunkardTheGame {
 
     public static void main(String[] args) {
         GameController gameController = new GameController();
-        gameController.startGame(1000);
+        gameController.startGame(200, 250);
     }
 }

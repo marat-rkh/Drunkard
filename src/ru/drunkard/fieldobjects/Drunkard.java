@@ -15,7 +15,7 @@ public class Drunkard extends MovableObj {
     public boolean isFallen = false;
     private Bottle bottle = new Bottle();
 
-    private final int BOTTLE_DROP_CHANCE = 30;
+    private final double BOTTLE_DROP_CHANCE = 1.0 / 30;
 
     public Drunkard(int x, int y) {
         super(x, y);
@@ -64,8 +64,7 @@ public class Drunkard extends MovableObj {
 
     private void tryDropBottle(int x_old, int y_old, Field field) {
         if(bottle != null) {
-            Random generator = new Random();
-            if(generator.nextInt(100) < BOTTLE_DROP_CHANCE) {
+            if(Math.random() < BOTTLE_DROP_CHANCE) {
                 Bottle bottleCopy = new Bottle();
                 field.setObjectInSector(x_old, y_old, bottleCopy);
                 bottle = null;
