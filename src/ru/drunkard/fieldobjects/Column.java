@@ -1,15 +1,21 @@
 package ru.drunkard.fieldobjects;
 
+import ru.drunkard.field.FieldState;
+
 /**
  * Created by mr_ito on 2/28/14.
  */
-public class Column implements IPassiveObj {
+public class Column implements INotMovableObj {
 
     public void doActions(FieldState fieldState) {
-        // does nothing
+        //does nothing
     }
 
-    public void accept(Drunkard drunkard) {
-        drunkard.sendToSleep();
+    public void accept(IFieldObj visitor) {
+        visitor.visit(this);
     }
+
+    public void visit(Drunkard drunkard) {}
+    public void visit(Column column) {}
+    public void visit(Bottle bottle) {}
 }

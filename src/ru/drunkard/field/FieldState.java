@@ -31,6 +31,6 @@ public class FieldState {
     }
 
     public void sendVisitorToSector(int x, int y, IFieldObj visitor) {
-
+        sectors.get(x).get(y).acceptVisitor(visitor);
     }
 }

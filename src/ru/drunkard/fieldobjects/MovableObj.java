@@ -8,7 +8,7 @@ import java.util.Random;
 /**
  * Created by mr_ito on 3/1/14.
  */
-abstract public class ActiveObj implements IActiveObj {
+abstract public class MovableObj implements IMovableObj {
 
     protected int x;
     protected int y;
@@ -24,6 +24,8 @@ abstract public class ActiveObj implements IActiveObj {
     public void moveInSector(DirectionVector directionVector, FieldState fieldState) {
         fieldState.setObjectInSector(x, y, null);
         fieldState.setObjectInSector(x + directionVector.dx, y + directionVector.dy, this);
+        x += directionVector.dx;
+        y += directionVector.dy;
     }
 
     public boolean sectorIsEmpty(DirectionVector directionVector, FieldState fieldState) {
