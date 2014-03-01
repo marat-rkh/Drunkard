@@ -7,7 +7,7 @@ import ru.drunkard.utility.DirectionVector;
 import java.util.Random;
 
 /**
- * Created by mr_ito on 2/28/14.
+ * Created by mr_ito on 2/28/14
  */
 public class Drunkard extends MovableObj {
 
