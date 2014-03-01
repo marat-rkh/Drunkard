@@ -11,15 +11,34 @@ import ru.drunkard.fieldobjects.Drunkard;
 public class GamePrinter {
 
     private final String HORIZONTAL_DELIMITER = "  ";
+    private String LEFT_BORDER = "";
 
-    public void printField(int gameStepNo, Field gameField) {
-        System.out.println("Game step #: " + String.valueOf(gameStepNo));
-        for(int i = 0; i < gameField.getWidth(); i++) {
-            for(int j = 0; j < gameField.getHeight(); j++) {
-                if(gameField.sectorIsEmpty(i, j)) {
+    public void printField(int gameStepNo, Field gameField, int tavern_x, int tavern_y) {
+        System.out.println("Game step : " + String.valueOf(gameStepNo));
+        if(tavern_y != 0) {
+            LEFT_BORDER = " ";
+        }
+        if(tavern_x != 0) {
+            System.out.print(LEFT_BORDER);
+            for(int i = 0; i < tavern_x; i++) {
+                System.out.print(" " + HORIZONTAL_DELIMITER);
+            }
+            System.out.print("T");
+            System.out.println();
+        }
+        for(int i = 0; i < gameField.getHeight(); i++) {
+            if(tavern_x == 0) {
+                if(tavern_y == i){
+                    System.out.print("T");
+                } else {
+                    System.out.print(LEFT_BORDER);
+                }
+            }
+            for(int j = 0; j < gameField.getWidth(); j++) {
+                if(gameField.sectorIsEmpty(j, i)) {
                     System.out.print(".");
                 } else {
-                    gameField.sendVisitorToSector(i, j, this);
+                    gameField.sendVisitorToSector(j, i, this);
                 }
                 System.out.print(HORIZONTAL_DELIMITER);
             }

@@ -17,6 +17,10 @@ public class Drunkard extends MovableObj {
 
     private final int BOTTLE_DROP_CHANCE = 30;
 
+    public Drunkard(int x, int y) {
+        super(x, y);
+    }
+
     public void doActions(Field field) {
         if(!isFallen && !isSleeping) {
             DirectionVector direction = generateMoveDirection();
@@ -62,8 +66,10 @@ public class Drunkard extends MovableObj {
         if(bottle != null) {
             Random generator = new Random();
             if(generator.nextInt(100) < BOTTLE_DROP_CHANCE) {
-                field.setObjectInSector(x_old, y_old, new Bottle());
+                Bottle bottleCopy = new Bottle();
+                field.setObjectInSector(x_old, y_old, bottleCopy);
                 bottle = null;
+                field.addNewObject(bottleCopy);
             }
         }
     }

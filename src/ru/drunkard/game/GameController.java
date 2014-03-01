@@ -3,9 +3,6 @@ package ru.drunkard.game;
 import ru.drunkard.field.Field;
 import ru.drunkard.fieldobjects.Column;
 import ru.drunkard.fieldobjects.Drunkard;
-import ru.drunkard.fieldobjects.IFieldObj;
-
-import java.util.ArrayList;
 
 /**
  * Created by mr_ito on 3/1/14.
@@ -20,22 +17,21 @@ public class GameController {
     private final int TAVERN_Y = 0;
     private final int DRUNKARD_GENERATION_STEP = 20;
 
-    private ArrayList<IFieldObj> objects = new ArrayList<IFieldObj>();
-    private Field gameField = new Field(FIELD_HEIGHT, FIELD_WIDTH);
+    private Field gameField = new Field(FIELD_WIDTH, FIELD_HEIGHT);
     private int gameStepNumber = 0;
 
     public GameController() {
         Column column = new Column();
-        objects.add(column);
         gameField.setObjectInSector(COLUMN_X, COLUMN_Y, column);
+        gameField.addNewObject(column);
     }
 
     public void startGame(int delay) {
         GamePrinter printer = new GamePrinter();
-        while(objects.size() != FIELD_HEIGHT * FIELD_WIDTH) {
+        while(true) {
             makeGameStep();
             ++gameStepNumber;
-            printer.printField(gameStepNumber, gameField);
+            printer.printField(gameStepNumber, gameField, TAVERN_X, TAVERN_Y);
             try {
                 Thread.sleep(delay);
             } catch(InterruptedException ex) {
@@ -45,19 +41,17 @@ public class GameController {
     }
 
     private void makeGameStep() {
+        gameField.makeAllObjectsDoActions();
         if(gameStepNumber % DRUNKARD_GENERATION_STEP == 0) {
             tryGenerateDrunkard();
-        }
-        for(int i = 0; i < objects.size(); i++) {
-            objects.get(i).doActions(gameField);
         }
     }
 
     private void tryGenerateDrunkard() {
         if(gameField.sectorIsEmpty(TAVERN_X, TAVERN_Y)) {
-            Drunkard newDrunkard = new Drunkard();
-            objects.add(newDrunkard);
+            Drunkard newDrunkard = new Drunkard(TAVERN_X, TAVERN_Y);
             gameField.setObjectInSector(TAVERN_X, TAVERN_Y, newDrunkard);
+            gameField.addNewObject(newDrunkard);
         }
     }
 }

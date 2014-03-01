@@ -41,4 +41,8 @@ public class Sector {
     public void acceptVisitor(GamePrinter visitor) {
         object.accept(visitor);
     }
+
+    public void makeObjectDoActions(Field field) {
+        object.doActions(field);
+    }
 }

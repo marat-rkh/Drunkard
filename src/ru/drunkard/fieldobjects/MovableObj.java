@@ -13,6 +13,11 @@ abstract public class MovableObj implements IMovableObj {
     protected int x;
     protected int y;
 
+    public MovableObj(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
     public DirectionVector generateMoveDirection() {
         Random generator = new Random();
         if(generator.nextInt(2) == 0) {
@@ -24,18 +29,20 @@ abstract public class MovableObj implements IMovableObj {
         }
     }
 
-    public void moveInSector(DirectionVector directionVector, Field field) {
-        field.setObjectInSector(x, y, null);
-        field.setObjectInSector(x + directionVector.dx, y + directionVector.dy, this);
-        x += directionVector.dx;
-        y += directionVector.dy;
+    public boolean outOfBorders(DirectionVector directionVector, Field field) {
+        int new_x = x + directionVector.dx;
+        int new_y = y + directionVector.dy;
+        return new_x >= field.getWidth() || new_y >= field.getHeight() || new_x < 0 || new_y < 0;
     }
 
     public boolean sectorIsEmpty(DirectionVector directionVector, Field field) {
         return field.sectorIsEmpty(x + directionVector.dx, y + directionVector.dy);
     }
 
-    public boolean outOfBorders(DirectionVector directionVector, Field field) {
-        return (x + directionVector.dx >= field.getWidth()) && (y + directionVector.dy >= field.getHeight());
+    public void moveInSector(DirectionVector directionVector, Field field) {
+        field.setObjectInSector(x, y, null);
+        field.setObjectInSector(x + directionVector.dx, y + directionVector.dy, this);
+        x += directionVector.dx;
+        y += directionVector.dy;
     }
 }
