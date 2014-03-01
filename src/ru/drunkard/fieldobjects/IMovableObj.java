@@ -1,6 +1,6 @@
 package ru.drunkard.fieldobjects;
 
-import ru.drunkard.field.FieldState;
+import ru.drunkard.field.Field;
 import ru.drunkard.utility.DirectionVector;
 
 /**
@@ -9,5 +9,5 @@ import ru.drunkard.utility.DirectionVector;
 public interface IMovableObj extends IFieldObj {
 
     public DirectionVector generateMoveDirection();
-    public void moveInSector(DirectionVector directionVector, FieldState fieldState);
+    public void moveInSector(DirectionVector directionVector, Field field);
 }

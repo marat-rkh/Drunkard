@@ -1,6 +1,6 @@
 package ru.drunkard.fieldobjects;
 
-import ru.drunkard.field.FieldState;
+import ru.drunkard.field.Field;
 import ru.drunkard.utility.DirectionVector;
 
 import java.util.Random;
@@ -13,22 +13,29 @@ abstract public class MovableObj implements IMovableObj {
     protected int x;
     protected int y;
 
-    private final int RAND_INT_UPPER_BOUND = 2;
-
     public DirectionVector generateMoveDirection() {
         Random generator = new Random();
-        return new DirectionVector(generator.nextInt(RAND_INT_UPPER_BOUND) - 1,
-                generator.nextInt(RAND_INT_UPPER_BOUND) - 1);
+        if(generator.nextInt(2) == 0) {
+            int dx = generator.nextInt(2) == 0 ? -1 : 1;
+            return new DirectionVector(dx, 0);
+        } else {
+            int dy = generator.nextInt(2) == 0 ? -1 : 1;
+            return new DirectionVector(0, dy);
+        }
     }
 
-    public void moveInSector(DirectionVector directionVector, FieldState fieldState) {
-        fieldState.setObjectInSector(x, y, null);
-        fieldState.setObjectInSector(x + directionVector.dx, y + directionVector.dy, this);
+    public void moveInSector(DirectionVector directionVector, Field field) {
+        field.setObjectInSector(x, y, null);
+        field.setObjectInSector(x + directionVector.dx, y + directionVector.dy, this);
         x += directionVector.dx;
         y += directionVector.dy;
     }
 
-    public boolean sectorIsEmpty(DirectionVector directionVector, FieldState fieldState) {
-        return fieldState.sectorIsEmpty(x + directionVector.dx, y + directionVector.dy);
+    public boolean sectorIsEmpty(DirectionVector directionVector, Field field) {
+        return field.sectorIsEmpty(x + directionVector.dx, y + directionVector.dy);
+    }
+
+    public boolean outOfBorders(DirectionVector directionVector, Field field) {
+        return (x + directionVector.dx >= field.getWidth()) && (y + directionVector.dy >= field.getHeight());
     }
 }

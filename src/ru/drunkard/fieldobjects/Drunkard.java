@@ -1,7 +1,7 @@
 package ru.drunkard.fieldobjects;
 
 import ru.drunkard.field.Field;
-import ru.drunkard.field.FieldState;
+import ru.drunkard.game.GamePrinter;
 import ru.drunkard.utility.DirectionVector;
 
 import java.util.Random;
@@ -11,25 +11,27 @@ import java.util.Random;
  */
 public class Drunkard extends MovableObj {
 
-    private boolean isSleeping = false;
-    private boolean isFallen = false;
+    public boolean isSleeping = false;
+    public boolean isFallen = false;
     private Bottle bottle = new Bottle();
 
     private final int BOTTLE_DROP_CHANCE = 30;
 
-    public void doActions(FieldState fieldState) {
-        DirectionVector direction = generateMoveDirection();
-        if(!direction.isZeroVector()) {
-            int xBeforeMoveTry = x;
-            int yBeforeMoveTry = y;
-            if(sectorIsEmpty(direction, fieldState)) {
-                moveInSector(direction, fieldState);
-            }
-            else {
-                fieldState.sendVisitorToSector(x + direction.dx, y + direction.dy, this);
-            }
-            if(xBeforeMoveTry != x || yBeforeMoveTry != y) {
-                tryDropBottle(xBeforeMoveTry, yBeforeMoveTry, fieldState);
+    public void doActions(Field field) {
+        if(!isFallen && !isSleeping) {
+            DirectionVector direction = generateMoveDirection();
+            if(!outOfBorders(direction, field)) {
+                int xBeforeMoveTry = x;
+                int yBeforeMoveTry = y;
+                if(sectorIsEmpty(direction, field)) {
+                    moveInSector(direction, field);
+                }
+                else {
+                    field.sendVisitorToSector(x + direction.dx, y + direction.dy, this);
+                }
+                if(xBeforeMoveTry != x || yBeforeMoveTry != y) {
+                    tryDropBottle(xBeforeMoveTry, yBeforeMoveTry, field);
+                }
             }
         }
     }
@@ -52,11 +54,15 @@ public class Drunkard extends MovableObj {
         isFallen = true;
     }
 
-    private void tryDropBottle(int x_old, int y_old, FieldState fieldState) {
+    public void accept(GamePrinter printer) {
+        printer.visit(this);
+    }
+
+    private void tryDropBottle(int x_old, int y_old, Field field) {
         if(bottle != null) {
             Random generator = new Random();
             if(generator.nextInt(100) < BOTTLE_DROP_CHANCE) {
-                fieldState.setObjectInSector(x_old, y_old, new Bottle());
+                field.setObjectInSector(x_old, y_old, new Bottle());
                 bottle = null;
             }
         }
