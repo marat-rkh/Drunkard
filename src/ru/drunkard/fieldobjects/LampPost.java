@@ -3,7 +3,11 @@ package ru.drunkard.fieldobjects;
 import ru.drunkard.field.Field;
 import ru.drunkard.game.GamePrinter;
 
-public class Bottle implements IFieldObj {
+/**
+ * Created by mr_ito on 4/9/14.
+ */
+public class LampPost implements IFieldObj {
+    public final int LIGHT_AREA_RADIUS = 3;
 
     public void doActions(Field field) { /*does nothing*/ }
 

@@ -4,7 +4,6 @@ package ru.drunkard.utility;
  * Created by mr_ito on 3/1/14.
  */
 public class DirectionVector {
-
     public int dx = 0;
     public int dy = 0;
 
@@ -12,8 +11,6 @@ public class DirectionVector {
         this.dx = dx;
         this.dy = dy;
     }
-
-    public boolean isZeroVector() {
-        return dx == 0 && dy == 0;
-    }
+    public boolean isZeroVector() { return dx == 0 && dy == 0; }
+    public static DirectionVector zero() { return new DirectionVector(0, 0); }
 }

@@ -4,27 +4,22 @@ import ru.drunkard.fieldobjects.IFieldObj;
 import ru.drunkard.game.GamePrinter;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.List;
 
-/**
- * Created by mr_ito on 2/28/14.
- */
 public class Field {
 
-    private ArrayList<IFieldObj> objects = new ArrayList<IFieldObj>();
-    private ArrayList<IFieldObj> lastAdded = new ArrayList<IFieldObj>();
-    private ArrayList<ArrayList<Sector>> sectors;
+    private List<IFieldObj> objects = new ArrayList<IFieldObj>();
+    private List<IFieldObj> lastAdded = new ArrayList<IFieldObj>();
+    private List<List<Sector>> sectors;
     private int width;
     private int height;
 
     public Field(int width, int height) {
         this.width = width;
         this.height = height;
-        sectors = new ArrayList<ArrayList<Sector>>();
+        sectors = new ArrayList<List<Sector>>();
         for(int i = 0; i < width; i++) {
-            ArrayList<Sector> row = new ArrayList<Sector>();
+            List<Sector> row = new ArrayList<Sector>();
             for(int j = 0; j < height; j++) {
                 row.add(new Sector(null));
             }
@@ -32,13 +27,8 @@ public class Field {
         }
     }
 
-    public int getHeight() {
-        return height;
-    }
-
-    public int getWidth() {
-        return width;
-    }
+    public int getHeight() { return height; }
+    public int getWidth() { return width; }
 
     public void makeAllObjectsDoActions() {
         for(IFieldObj obj : objects) {

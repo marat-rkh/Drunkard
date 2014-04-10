@@ -1,13 +1,8 @@
 package ru.drunkard.game;
 
 import ru.drunkard.field.Field;
-import ru.drunkard.fieldobjects.Bottle;
-import ru.drunkard.fieldobjects.Column;
-import ru.drunkard.fieldobjects.Drunkard;
+import ru.drunkard.fieldobjects.*;
 
-/**
- * Created by mr_ito on 3/1/14.
- */
 public class GamePrinter {
 
     private final String HORIZONTAL_DELIMITER = "  ";
@@ -57,11 +52,8 @@ public class GamePrinter {
         }
     }
 
-    public void visit(Bottle bottle) {
-        System.out.print("B");
-    }
-
-    public void visit(Column column) {
-        System.out.print("C");
-    }
+    public void visit(Bottle bottle) { System.out.print("B"); }
+    public void visit(Column column) { System.out.print("C"); }
+    public void visit(LampPost lampPost) { System.out.print("L"); }
+    public void visit(Cop cop) { System.out.print("P"); }
 }
