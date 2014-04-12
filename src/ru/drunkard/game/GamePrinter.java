@@ -18,7 +18,7 @@ public class GamePrinter {
     private final char EMPTY_SECTOR = '.';
     private final char LIGHTEN_SECTOR = ',';
     private final char TAVERN = 'T';
-    private final char POLICE_STATION = 'P';
+    private final char POLICE_STATION = 'S';
     private final char GLASS_STATION = 'G';
     private final String HORIZONTAL_DELIMITER = "  ";
 
