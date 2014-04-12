@@ -2,58 +2,96 @@ package ru.drunkard.game;
 
 import ru.drunkard.field.Field;
 import ru.drunkard.fieldobjects.*;
+import ru.drunkard.utility.Point;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GamePrinter {
+    private List<Character> frameUpperPart;
+    private List<Character> frameBottomPart;
+    private List<Character> frameRightPart;
+    private List<Character> frameLeftPart;
 
+    private final char FRAME_EMPTY_ELEM = ' ';
+    private final char EMPTY = '.';
+    private final char TAVERN = 'T';
+    private final char POLICE_STATION = 'P';
+    private final char GLASS_STATION = 'G';
     private final String HORIZONTAL_DELIMITER = "  ";
-    private String LEFT_BORDER = "";
 
-    public void printField(int gameStepNo, Field gameField, int tavern_x, int tavern_y) {
-        System.out.println("Game step : " + String.valueOf(gameStepNo));
-        if(tavern_y != 0) {
-            LEFT_BORDER = " ";
+    public GamePrinter(int fieldWidth, int fieldHeight) {
+        frameUpperPart = new ArrayList<>();
+        initFramePart(frameUpperPart, fieldWidth + 2);
+        frameBottomPart = new ArrayList<>();
+        initFramePart(frameBottomPart, fieldWidth + 2);
+        frameRightPart = new ArrayList<>();
+        initFramePart(frameRightPart, fieldHeight);
+        frameLeftPart = new ArrayList<>();
+        initFramePart(frameLeftPart, fieldHeight);
+    }
+
+    public void setTavern(Point pos) { setFrameObject(pos, TAVERN); }
+    public void setPoliceStation(Point pos) { setFrameObject(pos, POLICE_STATION); }
+    public void setGlassStation(Point pos) { setFrameObject(pos, GLASS_STATION); }
+
+    public void printField(Integer gameStepNo, Field gameField) {
+        System.out.println("Game step : " + gameStepNo.toString());
+        for(Character ch : frameUpperPart) {
+            printChar(ch);
         }
-        if(tavern_x != 0) {
-            System.out.print(LEFT_BORDER);
-            for(int i = 0; i < tavern_x; i++) {
-                System.out.print(" " + HORIZONTAL_DELIMITER);
-            }
-            System.out.print("T");
-            System.out.println();
-        }
+        System.out.println();
         for(int i = 0; i < gameField.getHeight(); i++) {
-            if(tavern_x == 0) {
-                if(tavern_y == i){
-                    System.out.print("T");
-                } else {
-                    System.out.print(LEFT_BORDER);
-                }
-            }
+            printChar(frameLeftPart.get(i));
             for(int j = 0; j < gameField.getWidth(); j++) {
                 if(gameField.sectorIsEmpty(j, i)) {
-                    System.out.print(".");
+                    printChar(EMPTY);
                 } else {
                     gameField.sendVisitorToSector(j, i, this);
                 }
-                System.out.print(HORIZONTAL_DELIMITER);
             }
-            System.out.println();
+            System.out.println(frameRightPart.get(i));
+        }
+        for(Character ch : frameBottomPart) {
+            printChar(ch);
         }
         System.out.println();
     }
 
-    public void visit(Drunkard drunkard) {
-        if(drunkard.isSleeping) {
-            System.out.print("Z");
-        } else if(drunkard.isFallen) {
-            System.out.print("&");
-        } else {
-            System.out.print("D");
+    private void initFramePart(List<Character> framePart, int size) {
+        for(int i = 0; i < size; i++) {
+            framePart.add(FRAME_EMPTY_ELEM);
         }
     }
 
-    public void visit(Bottle bottle) { System.out.print("B"); }
-    public void visit(Column column) { System.out.print("C"); }
-    public void visit(LampPost lampPost) { System.out.print("L"); }
-    public void visit(Cop cop) { System.out.print("P"); }
+    private void setFrameObject(Point pos, char symbol) {
+        if(pos.y == 0) {
+            frameUpperPart.add(pos.x + 1, symbol);
+        } else if(pos.y == frameLeftPart.size() - 1) {
+            frameBottomPart.add(pos.x + 1, symbol);
+        } else if(pos.x == 0) {
+            frameLeftPart.add(pos.y, symbol);
+        } else {
+            frameRightPart.add(pos.y, symbol);
+        }
+    }
+    private void printChar(char symbol) {
+        System.out.print(symbol);
+        System.out.print(HORIZONTAL_DELIMITER);
+    }
+
+    public void visit(Drunkard drunkard) {
+        if(drunkard.isSleeping) {
+            printChar('z');
+        } else if(drunkard.isFallen) {
+            printChar('&');
+        } else {
+            printChar('D');
+        }
+    }
+    public void visit(Bottle bottle) { printChar('b' ); }
+    public void visit(Column column) { printChar('C'); }
+    public void visit(LampPost lampPost) { printChar('L'); }
+    public void visit(Cop cop) { printChar('P'); }
+    public void visit(Hobo hobo) { printChar('H'); }
 }

@@ -1,10 +1,7 @@
 package ru.drunkard.game;
 
 import ru.drunkard.field.Field;
-import ru.drunkard.fieldobjects.Column;
-import ru.drunkard.fieldobjects.Cop;
-import ru.drunkard.fieldobjects.Drunkard;
-import ru.drunkard.fieldobjects.LampPost;
+import ru.drunkard.fieldobjects.*;
 import ru.drunkard.movestrategies.DrunkardMoveStrategy;
 import ru.drunkard.movestrategies.IDirectedMoveStrategy;
 import ru.drunkard.movestrategies.ShortestPathMoveStrategy;
@@ -14,16 +11,18 @@ import ru.drunkard.utility.WatchingArea;
 public class GameController {
     private final int FIELD_HEIGHT = 15;
     private final int FIELD_WIDTH = 15;
+    private final int TAVERN_X = 9;
+    private final int TAVERN_Y = 0;
     private final int COLUMN_X = 7;
     private final int COLUMN_Y = 7;
+    private final int DRUNKARD_GENERATION_STEP = 20;
     private final int LAMPPOST_X = 10;
     private final int LAMPPOST_Y = 3;
     private final int LAMPPOST_LIGHT_AREA_RADIUS = 3;
-    private final int TAVERN_X = 9;
-    private final int TAVERN_Y = 0;
     private final int POLICE_STATION_X = 14;
     private final int POLICE_STATION_Y = 3;
-    private final int DRUNKARD_GENERATION_STEP = 20;
+    private final int GLASS_STATION_X = 0;
+    private final int GLASS_STATION_Y = 4;
 
     private Field gameField = new Field(FIELD_WIDTH, FIELD_HEIGHT);
     private int gameStepNumber = 0;
@@ -36,19 +35,25 @@ public class GameController {
         gameField.setObjectInSector(LAMPPOST_X, LAMPPOST_Y, lampPost);
         gameField.addNewObject(lampPost);
         gameField.addNewObject(createCop());
+        gameField.addNewObject(createHobo());
         //debug
         //debugCreateInitialObjects();
     }
 
-    public void startGame(int maxSteps, int delay) {
-        GamePrinter printer = new GamePrinter();
+    public void startGame(int maxSteps, int delay, int stepsToSkip) {
+        GamePrinter printer = new GamePrinter(FIELD_WIDTH, FIELD_HEIGHT);
+        printer.setTavern(new Point(TAVERN_X, TAVERN_Y));
+        printer.setPoliceStation(new Point(POLICE_STATION_X, POLICE_STATION_Y));
+        printer.setGlassStation(new Point(GLASS_STATION_X, GLASS_STATION_Y));
         for(; gameStepNumber < maxSteps; gameStepNumber++) {
             makeGameStep();
-            printer.printField(gameStepNumber, gameField, TAVERN_X, TAVERN_Y);
-            try {
-                Thread.sleep(delay);
-            } catch(InterruptedException ex) {
-                Thread.currentThread().interrupt();
+            if(gameStepNumber >= stepsToSkip) {
+                printer.printField(gameStepNumber, gameField);
+                try {
+                    Thread.sleep(delay);
+                } catch (InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                }
             }
         }
     }
@@ -74,6 +79,14 @@ public class GameController {
         Point lampPostPos = new Point(LAMPPOST_X, LAMPPOST_Y);
         WatchingArea watchingArea = new WatchingArea(gameField, lampPostPos, LAMPPOST_LIGHT_AREA_RADIUS);
         return new Cop(startPos, copsMoveStrategy, watchingArea);
+    }
+
+    private Hobo createHobo() {
+        Point startPos = new Point(GLASS_STATION_X, GLASS_STATION_Y);
+        IDirectedMoveStrategy hobosMoveStrategy = new ShortestPathMoveStrategy();
+        Point fieldCenter = new Point(FIELD_WIDTH / 2, FIELD_HEIGHT / 2);
+        WatchingArea watchingArea = new WatchingArea(gameField, fieldCenter, FIELD_WIDTH);
+        return new Hobo(startPos, hobosMoveStrategy, watchingArea);
     }
 
     private void debugCreateInitialObjects() {

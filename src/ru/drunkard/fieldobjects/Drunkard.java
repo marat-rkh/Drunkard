@@ -42,6 +42,7 @@ public class Drunkard extends UndirectedMovableObj {
     public void visit(Bottle bottle) { isFallen = true; }
     public void visit(LampPost lampPost) {}
     public void visit(Cop cop) { cop.visit(this); }
+    public void visit(Hobo hobo) {}
 
     public void accept(IFieldObj visitor) { visitor.visit(this); }
     public void accept(GamePrinter printer) { printer.visit(this); }
