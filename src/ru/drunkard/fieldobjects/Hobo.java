@@ -5,15 +5,15 @@ import ru.drunkard.game.GamePrinter;
 import ru.drunkard.movestrategies.IDirectedMoveStrategy;
 import ru.drunkard.states.movableobjstate.*;
 import ru.drunkard.utility.DirectionVector;
+import ru.drunkard.utility.FieldArea;
 import ru.drunkard.utility.Point;
-import ru.drunkard.utility.WatchingArea;
 
 public class Hobo extends DirectedMovableObj implements ISeekerWithState {
     private ISeekerState hState = new WaitingState();
     private final Point glassStationPos;
     private int timer = 30;
 
-    public Hobo(Point startPos, IDirectedMoveStrategy ms, WatchingArea wa) {
+    public Hobo(Point startPos, IDirectedMoveStrategy ms, FieldArea wa) {
         super(startPos, ms, wa);
         glassStationPos = new Point(startPos.x, startPos.y);
     }

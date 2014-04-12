@@ -2,6 +2,7 @@ package ru.drunkard.game;
 
 import ru.drunkard.field.Field;
 import ru.drunkard.fieldobjects.*;
+import ru.drunkard.utility.FieldArea;
 import ru.drunkard.utility.Point;
 
 import java.util.ArrayList;
@@ -14,11 +15,14 @@ public class GamePrinter {
     private List<Character> frameLeftPart;
 
     private final char FRAME_EMPTY_ELEM = ' ';
-    private final char EMPTY = '.';
+    private final char EMPTY_SECTOR = '.';
+    private final char LIGHTEN_SECTOR = ',';
     private final char TAVERN = 'T';
     private final char POLICE_STATION = 'P';
     private final char GLASS_STATION = 'G';
     private final String HORIZONTAL_DELIMITER = "  ";
+
+    private FieldArea lightArea;
 
     public GamePrinter(int fieldWidth, int fieldHeight) {
         frameUpperPart = new ArrayList<>();
@@ -34,6 +38,9 @@ public class GamePrinter {
     public void setTavern(Point pos) { setFrameObject(pos, TAVERN); }
     public void setPoliceStation(Point pos) { setFrameObject(pos, POLICE_STATION); }
     public void setGlassStation(Point pos) { setFrameObject(pos, GLASS_STATION); }
+    public void setLampPost(Field field, Point pos, int lightAreaRadius) {
+        lightArea = new FieldArea(field, pos, lightAreaRadius);
+    }
 
     public void printField(Integer gameStepNo, Field gameField) {
         System.out.println("Game step : " + gameStepNo.toString());
@@ -45,7 +52,11 @@ public class GamePrinter {
             printChar(frameLeftPart.get(i));
             for(int j = 0; j < gameField.getWidth(); j++) {
                 if(gameField.sectorIsEmpty(j, i)) {
-                    printChar(EMPTY);
+                    if(lightArea.coversPoint(new Point(j, i))) {
+                        printChar(LIGHTEN_SECTOR);
+                    } else {
+                        printChar(EMPTY_SECTOR);
+                    }
                 } else {
                     gameField.sendVisitorToSector(j, i, this);
                 }
@@ -82,7 +93,7 @@ public class GamePrinter {
 
     public void visit(Drunkard drunkard) {
         if(drunkard.isSleeping) {
-            printChar('z');
+            printChar('Z');
         } else if(drunkard.isFallen) {
             printChar('&');
         } else {

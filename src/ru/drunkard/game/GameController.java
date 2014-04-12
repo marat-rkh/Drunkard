@@ -5,8 +5,8 @@ import ru.drunkard.fieldobjects.*;
 import ru.drunkard.movestrategies.DrunkardMoveStrategy;
 import ru.drunkard.movestrategies.IDirectedMoveStrategy;
 import ru.drunkard.movestrategies.ShortestPathMoveStrategy;
+import ru.drunkard.utility.FieldArea;
 import ru.drunkard.utility.Point;
-import ru.drunkard.utility.WatchingArea;
 
 public class GameController {
     private final int FIELD_HEIGHT = 15;
@@ -41,10 +41,7 @@ public class GameController {
     }
 
     public void startGame(int maxSteps, int delay, int stepsToSkip) {
-        GamePrinter printer = new GamePrinter(FIELD_WIDTH, FIELD_HEIGHT);
-        printer.setTavern(new Point(TAVERN_X, TAVERN_Y));
-        printer.setPoliceStation(new Point(POLICE_STATION_X, POLICE_STATION_Y));
-        printer.setGlassStation(new Point(GLASS_STATION_X, GLASS_STATION_Y));
+        GamePrinter printer = createGamePrinter();
         for(; gameStepNumber < maxSteps; gameStepNumber++) {
             makeGameStep();
             if(gameStepNumber >= stepsToSkip) {
@@ -56,6 +53,15 @@ public class GameController {
                 }
             }
         }
+    }
+
+    private GamePrinter createGamePrinter() {
+        GamePrinter printer = new GamePrinter(FIELD_WIDTH, FIELD_HEIGHT);
+        printer.setTavern(new Point(TAVERN_X, TAVERN_Y));
+        printer.setPoliceStation(new Point(POLICE_STATION_X, POLICE_STATION_Y));
+        printer.setGlassStation(new Point(GLASS_STATION_X, GLASS_STATION_Y));
+        printer.setLampPost(gameField, new Point(LAMPPOST_X, LAMPPOST_Y), LAMPPOST_LIGHT_AREA_RADIUS);
+        return printer;
     }
 
     private void makeGameStep() {
@@ -77,16 +83,16 @@ public class GameController {
         Point startPos = new Point(POLICE_STATION_X, POLICE_STATION_Y);
         IDirectedMoveStrategy copsMoveStrategy = new ShortestPathMoveStrategy();
         Point lampPostPos = new Point(LAMPPOST_X, LAMPPOST_Y);
-        WatchingArea watchingArea = new WatchingArea(gameField, lampPostPos, LAMPPOST_LIGHT_AREA_RADIUS);
-        return new Cop(startPos, copsMoveStrategy, watchingArea);
+        FieldArea fieldArea = new FieldArea(gameField, lampPostPos, LAMPPOST_LIGHT_AREA_RADIUS);
+        return new Cop(startPos, copsMoveStrategy, fieldArea);
     }
 
     private Hobo createHobo() {
         Point startPos = new Point(GLASS_STATION_X, GLASS_STATION_Y);
         IDirectedMoveStrategy hobosMoveStrategy = new ShortestPathMoveStrategy();
         Point fieldCenter = new Point(FIELD_WIDTH / 2, FIELD_HEIGHT / 2);
-        WatchingArea watchingArea = new WatchingArea(gameField, fieldCenter, FIELD_WIDTH);
-        return new Hobo(startPos, hobosMoveStrategy, watchingArea);
+        FieldArea fieldArea = new FieldArea(gameField, fieldCenter, FIELD_WIDTH);
+        return new Hobo(startPos, hobosMoveStrategy, fieldArea);
     }
 
     private void debugCreateInitialObjects() {

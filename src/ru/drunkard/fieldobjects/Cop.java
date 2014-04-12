@@ -5,14 +5,14 @@ import ru.drunkard.game.GamePrinter;
 import ru.drunkard.movestrategies.IDirectedMoveStrategy;
 import ru.drunkard.states.movableobjstate.*;
 import ru.drunkard.utility.DirectionVector;
+import ru.drunkard.utility.FieldArea;
 import ru.drunkard.utility.Point;
-import ru.drunkard.utility.WatchingArea;
 
 public class Cop extends DirectedMovableObj implements ISeekerWithState {
     private ISeekerState cState = new SeekingState();
     private final Point policeStationPos;
 
-    public Cop(Point startPos, IDirectedMoveStrategy ms, WatchingArea lampPostWA) {
+    public Cop(Point startPos, IDirectedMoveStrategy ms, FieldArea lampPostWA) {
         super(startPos, ms, lampPostWA);
         policeStationPos = new Point(startPos.x, startPos.y);
     }

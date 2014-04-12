@@ -4,7 +4,7 @@ import ru.drunkard.field.Field;
 
 import java.util.Iterator;
 
-public class WatchingArea {
+public class FieldArea {
     public final Point startPos;
     public final int rightBorder;
     public final int bottomBorder;
@@ -13,7 +13,7 @@ public class WatchingArea {
     private int scannedElementsNumber = 0;
     private Point currentPos;
 
-    public WatchingArea(Field field, Point center, int radius) {
+    public FieldArea(Field field, Point center, int radius) {
         int left = center.x - radius >= 0 ? center.x - radius : 0;
         int right = center.x + radius < field.getWidth() ? center.x + radius : field.getWidth() - 1;
         int top = center.y - radius >= 0 ? center.y - radius : 0;
@@ -28,6 +28,11 @@ public class WatchingArea {
     public AreaIterator iterator() {
         scannedElementsNumber = 0;
         return this.new AreaIterator();
+    }
+
+    public boolean coversPoint(Point p) {
+        return startPos.x <= p.x && p.x <= rightBorder &&
+               startPos.y <= p.y && p.y <= bottomBorder;
     }
 
     private class AreaIterator implements Iterator<Point> {
