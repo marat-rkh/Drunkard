@@ -30,10 +30,8 @@ public class GameController {
     public GameController() {
         Column column = new Column();
         gameField.setObjectInSector(COLUMN_X, COLUMN_Y, column);
-        gameField.addNewObject(column);
         LampPost lampPost = new LampPost();
         gameField.setObjectInSector(LAMPPOST_X, LAMPPOST_Y, lampPost);
-        gameField.addNewObject(lampPost);
         gameField.addNewObject(createCop());
         gameField.addNewObject(createHobo());
         //debug
