@@ -2,7 +2,6 @@ package ru.drunkard.movestrategies;
 
 import ru.drunkard.field.GameField;
 import ru.drunkard.utility.BFSNodeInfo;
-import ru.drunkard.utility.DirectionVector;
 import ru.drunkard.utility.Point;
 
 import java.util.*;
@@ -10,12 +9,11 @@ import java.util.*;
 public class ShortestPathMoveStrategy implements IDirectedMoveStrategy {
     private Stack<Point> latestPath = new Stack<>();
 
-    public DirectionVector nextMoveDirection(Point start, Point target, GameField field) {
+    public Point nextPosition(Point start, Point target, GameField field) {
         if(latestPathIsUpToDate(field) || recountPath(start, target, field)) {
-            Point nextPoint = latestPath.pop();
-            return new DirectionVector(nextPoint.x - start.x, nextPoint.y - start.y);
+            return latestPath.pop();
         }
-        return DirectionVector.zero();
+        return start;
     }
 
     private boolean latestPathIsUpToDate(GameField field) {
@@ -37,7 +35,7 @@ public class ShortestPathMoveStrategy implements IDirectedMoveStrategy {
         elems.add(start);
         while (!elems.isEmpty()) {
             Point current = elems.remove();
-            List<Point> neighbours = field.getNeighbours(current, target);
+            List<Point> neighbours = field.getFreeNeighbours(current, target);
             for(Point neighbour : neighbours) {
                 BFSNodeInfo neighbourInfo = nodesInfo.get(neighbour);
                 BFSNodeInfo currentInfo = nodesInfo.get(current);

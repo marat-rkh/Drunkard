@@ -1,7 +1,7 @@
 package ru.drunkard.field;
 
 import ru.drunkard.fieldobjects.IFieldObj;
-import ru.drunkard.game.RectGamePrinter;
+import ru.drunkard.gameprinters.GamePrinter;
 import ru.drunkard.utility.Point;
 
 import java.util.Iterator;
@@ -13,10 +13,10 @@ public interface GameField {
     public void addNewObject(IFieldObj newObject);
     public boolean sectorIsEmpty(int x, int y);
     public void sendVisitorToSector(int x, int y, IFieldObj visitor);
-    public void sendVisitorToSector(int x, int y, RectGamePrinter visitor);
+    public void sendVisitorToSector(int x, int y, GamePrinter visitor);
 
-    public boolean pointIsOutOfBorders(int x, int y);
-    public List<Point> getNeighbours(Point p, Point special);
+    public List<Point> getAllNeighbours(Point p);
+    public List<Point> getFreeNeighbours(Point p, Point special);
     public Iterator<Point> getIterator(Point topleft, Point bottomright);
     public Iterator<Point> getIterator();
 }

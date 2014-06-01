@@ -1,9 +1,12 @@
 package ru.drunkard.game;
 
+import ru.drunkard.field.HexField;
+import ru.drunkard.gameprinters.GamePrinter;
+import ru.drunkard.gameprinters.HexGamePrinter;
+import ru.drunkard.gameprinters.RectGamePrinter;
 import ru.drunkard.field.RectField;
 import ru.drunkard.field.GameField;
 import ru.drunkard.fieldobjects.*;
-import ru.drunkard.movestrategies.DrunkardMoveStrategy;
 import ru.drunkard.movestrategies.IDirectedMoveStrategy;
 import ru.drunkard.movestrategies.ShortestPathMoveStrategy;
 import ru.drunkard.utility.Point;
@@ -24,10 +27,18 @@ public class GameController {
     private final int GLASS_STATION_X = 0;
     private final int GLASS_STATION_Y = 4;
 
-    private GameField gameField = new RectField(FIELD_WIDTH, FIELD_HEIGHT);
+    private GameField gameField = null;
     private int gameStepNumber = 0;
 
-    public GameController() {
+    private boolean useHexField = false;
+
+    public GameController(boolean useHexField) {
+        this.useHexField = useHexField;
+        if(useHexField) {
+            gameField = new HexField(FIELD_WIDTH, FIELD_HEIGHT);
+        } else {
+            gameField = new RectField(FIELD_WIDTH, FIELD_HEIGHT);
+        }
         Column column = new Column();
         gameField.setObjectInSector(COLUMN_X, COLUMN_Y, column);
         LampPost lampPost = new LampPost();
@@ -54,7 +65,12 @@ public class GameController {
     }
 
     private GamePrinter createGamePrinter() {
-        GamePrinter printer = new RectGamePrinter(FIELD_WIDTH, FIELD_HEIGHT);
+        GamePrinter printer;
+        if(useHexField) {
+            printer = new HexGamePrinter(FIELD_WIDTH, FIELD_HEIGHT);
+        } else {
+            printer = new RectGamePrinter(FIELD_WIDTH, FIELD_HEIGHT);
+        }
         printer.setTavern(new Point(TAVERN_X, TAVERN_Y));
         printer.setPoliceStation(new Point(POLICE_STATION_X, POLICE_STATION_Y));
         printer.setGlassStation(new Point(GLASS_STATION_X, GLASS_STATION_Y));
@@ -72,7 +88,7 @@ public class GameController {
 
     private void tryGenerateDrunkard() {
         if(gameField.sectorIsEmpty(TAVERN_X, TAVERN_Y)) {
-            Drunkard newDrunkard = new Drunkard(TAVERN_X, TAVERN_Y, new DrunkardMoveStrategy());
+            Drunkard newDrunkard = new Drunkard(TAVERN_X, TAVERN_Y);
             gameField.setObjectInSector(TAVERN_X, TAVERN_Y, newDrunkard);
             gameField.addNewObject(newDrunkard);
         }
@@ -93,31 +109,31 @@ public class GameController {
     }
 
     private void debugCreateInitialObjects() {
-        Drunkard newDrunkard = new Drunkard(14, 4, new DrunkardMoveStrategy());
+        Drunkard newDrunkard = new Drunkard(14, 4);
         gameField.setObjectInSector(14, 4, newDrunkard);
         gameField.addNewObject(newDrunkard);
-        Drunkard newDrunkard2 = new Drunkard(14, 2, new DrunkardMoveStrategy());
+        Drunkard newDrunkard2 = new Drunkard(14, 2);
         gameField.setObjectInSector(14, 2, newDrunkard2);
         gameField.addNewObject(newDrunkard2);
-        Drunkard newDrunkard3 = new Drunkard(12, 3, new DrunkardMoveStrategy());
+        Drunkard newDrunkard3 = new Drunkard(12, 3);
         gameField.setObjectInSector(12, 3, newDrunkard3);
         gameField.addNewObject(newDrunkard3);
-        Drunkard newDrunkard4 = new Drunkard(13, 4, new DrunkardMoveStrategy());
+        Drunkard newDrunkard4 = new Drunkard(13, 4);
         gameField.setObjectInSector(13, 4, newDrunkard4);
         gameField.addNewObject(newDrunkard4);
-        Drunkard newDrunkard5 = new Drunkard(13, 3, new DrunkardMoveStrategy());
+        Drunkard newDrunkard5 = new Drunkard(13, 3);
         gameField.setObjectInSector(13, 3, newDrunkard5);
         gameField.addNewObject(newDrunkard5);
-        Drunkard newDrunkard6 = new Drunkard(12, 4, new DrunkardMoveStrategy());
+        Drunkard newDrunkard6 = new Drunkard(12, 4);
         gameField.setObjectInSector(12, 4, newDrunkard6);
         gameField.addNewObject(newDrunkard6);
-        Drunkard newDrunkard7 = new Drunkard(12, 2, new DrunkardMoveStrategy());
+        Drunkard newDrunkard7 = new Drunkard(12, 2);
         gameField.setObjectInSector(12, 2, newDrunkard7);
         gameField.addNewObject(newDrunkard7);
-        Drunkard newDrunkard8 = new Drunkard(11, 3, new DrunkardMoveStrategy());
+        Drunkard newDrunkard8 = new Drunkard(11, 3);
         gameField.setObjectInSector(11, 3, newDrunkard8);
         gameField.addNewObject(newDrunkard8);
-        Drunkard newDrunkard9 = new Drunkard(10, 4, new DrunkardMoveStrategy());
+        Drunkard newDrunkard9 = new Drunkard(10, 4);
         gameField.setObjectInSector(10, 4, newDrunkard9);
         gameField.addNewObject(newDrunkard9);
     }

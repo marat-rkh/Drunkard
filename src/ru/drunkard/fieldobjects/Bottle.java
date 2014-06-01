@@ -1,7 +1,7 @@
 package ru.drunkard.fieldobjects;
 
 import ru.drunkard.field.GameField;
-import ru.drunkard.game.RectGamePrinter;
+import ru.drunkard.gameprinters.GamePrinter;
 
 public class Bottle implements IFieldObj {
 
@@ -15,5 +15,5 @@ public class Bottle implements IFieldObj {
     public void visit(Hobo hobo) {}
 
     public void accept(IFieldObj visitor) { visitor.visit(this); }
-    public void accept(RectGamePrinter printer) { printer.visit(this); }
+    public void accept(GamePrinter printer) { printer.visit(this); }
 }

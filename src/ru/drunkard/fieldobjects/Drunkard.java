@@ -1,9 +1,8 @@
 package ru.drunkard.fieldobjects;
 
 import ru.drunkard.field.GameField;
-import ru.drunkard.game.RectGamePrinter;
-import ru.drunkard.movestrategies.IUndirectedMoveStrategy;
-import ru.drunkard.utility.DirectionVector;
+import ru.drunkard.gameprinters.GamePrinter;
+import ru.drunkard.movestrategies.DrunkardMoveStrategy;
 import ru.drunkard.utility.Point;
 
 public class Drunkard extends UndirectedMovableObj {
@@ -13,18 +12,18 @@ public class Drunkard extends UndirectedMovableObj {
 
     private final double BOTTLE_DROP_CHANCE = 1.0 / 30;
 
-    public Drunkard(int x, int y, IUndirectedMoveStrategy ms) { super(new Point(x, y), ms); }
+    public Drunkard(int x, int y) { super(new Point(x, y), new DrunkardMoveStrategy()); }
 
     public void doActions(GameField field) {
         if(!isFallen && !isSleeping) {
             int xBeforeMoveTry = pos.x;
             int yBeforeMoveTry = pos.y;
-            DirectionVector dv = moveStrategy.nextMoveDirection(pos, field);
-            if(!dv.isZeroVector()) {
-                if(sectorIsEmpty(dv, field)) {
-                    moveInSector(dv, field);
+            Point nextPos = moveStrategy.nextPosition(pos, field);
+            if(!nextPos.equals(pos)) {
+                if(field.sectorIsEmpty(nextPos.x, nextPos.y)) {
+                    moveInSector(nextPos, field);
                 } else {
-                    field.sendVisitorToSector(pos.x + dv.dx, pos.y + dv.dy, this);
+                    field.sendVisitorToSector(nextPos.x, nextPos.y, this);
                 }
                 if(xBeforeMoveTry != pos.x || yBeforeMoveTry != pos.y) {
                     tryDropBottle(xBeforeMoveTry, yBeforeMoveTry, field);
@@ -45,7 +44,7 @@ public class Drunkard extends UndirectedMovableObj {
     public void visit(Hobo hobo) {}
 
     public void accept(IFieldObj visitor) { visitor.visit(this); }
-    public void accept(RectGamePrinter printer) { printer.visit(this); }
+    public void accept(GamePrinter printer) { printer.visit(this); }
 
     private void tryDropBottle(int xOld, int yOld, GameField field) {
         if(bottle != null) {

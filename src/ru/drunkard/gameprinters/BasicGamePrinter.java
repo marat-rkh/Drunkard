@@ -1,4 +1,4 @@
-package ru.drunkard.game;
+package ru.drunkard.gameprinters;
 
 import ru.drunkard.fieldobjects.*;
 import ru.drunkard.utility.Point;
@@ -14,11 +14,11 @@ public abstract class BasicGamePrinter implements GamePrinter {
 
     protected final char FRAME_EMPTY_ELEM = ' ';
     protected final char EMPTY_SECTOR = '.';
-    protected final char LIGHTEN_SECTOR = ',';
+    protected final char LIGHTEN_SECTOR = ';';
     protected final char TAVERN = 'T';
     protected final char POLICE_STATION = 'S';
     protected final char GLASS_STATION = 'G';
-    protected final String HORIZONTAL_DELIMITER = "  ";
+    protected final String HORIZONTAL_DELIMITER = "   ";
 
     protected Point lightAreaStart;
     protected Point lightAreaEnd;

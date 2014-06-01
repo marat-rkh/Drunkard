@@ -1,10 +1,9 @@
 package ru.drunkard.fieldobjects;
 
 import ru.drunkard.field.GameField;
-import ru.drunkard.game.RectGamePrinter;
+import ru.drunkard.gameprinters.GamePrinter;
 import ru.drunkard.movestrategies.IDirectedMoveStrategy;
 import ru.drunkard.states.movableobjstate.*;
-import ru.drunkard.utility.DirectionVector;
 import ru.drunkard.utility.Point;
 
 public class Hobo extends DirectedMovableObj implements ISeekerWithState {
@@ -41,16 +40,16 @@ public class Hobo extends DirectedMovableObj implements ISeekerWithState {
         }
     }
     public void goToTarget(Point target, GameField field) {
-        DirectionVector dv = moveStrategy.nextMoveDirection(pos, target, field);
-        if(pos.x + dv.dx == target.x && pos.y + dv.dy == target.y) {
-            field.setObjectInSector(pos.x + dv.dx, pos.y + dv.dy, null);
+        Point nextPos = moveStrategy.nextPosition(pos, target, field);
+        if(nextPos.x == target.x && nextPos.y == target.y) {
+            field.setObjectInSector(nextPos.x, nextPos.y, null);
             hState = new ReturnToStartState();
         }
-        moveInSector(dv, field);
+        moveInSector(nextPos, field);
     }
     public void returnToStartPos(GameField field) {
-        DirectionVector dv = moveStrategy.nextMoveDirection(pos, glassStationPos, field);
-        moveInSector(dv, field);
+        Point nextPos = moveStrategy.nextPosition(pos, glassStationPos, field);
+        moveInSector(nextPos, field);
         if(pos.x == glassStationPos.x && pos.y == glassStationPos.y) {
             hState = new EnterStartPosState();
         }
@@ -69,5 +68,5 @@ public class Hobo extends DirectedMovableObj implements ISeekerWithState {
     public void visit(Hobo hobo) {}
 
     public void accept(IFieldObj visitor) { visitor.visit(this); }
-    public void accept(RectGamePrinter printer) { printer.visit(this); }
+    public void accept(GamePrinter printer) { printer.visit(this); }
 }

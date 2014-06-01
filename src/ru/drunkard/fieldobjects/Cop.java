@@ -1,10 +1,9 @@
 package ru.drunkard.fieldobjects;
 
 import ru.drunkard.field.GameField;
-import ru.drunkard.game.RectGamePrinter;
+import ru.drunkard.gameprinters.GamePrinter;
 import ru.drunkard.movestrategies.IDirectedMoveStrategy;
 import ru.drunkard.states.movableobjstate.*;
-import ru.drunkard.utility.DirectionVector;
 import ru.drunkard.utility.Point;
 
 public class Cop extends DirectedMovableObj implements ISeekerWithState {
@@ -31,22 +30,22 @@ public class Cop extends DirectedMovableObj implements ISeekerWithState {
     }
 
     public void goToTarget(Point target, GameField field) {
-        DirectionVector dv = moveStrategy.nextMoveDirection(pos, target, field);
-        if(dv.isZeroVector()) {
+        Point nextPos = moveStrategy.nextPosition(pos, target, field);
+        if(nextPos.equals(pos)) {
             cState = new ReturnToStartState();
             cState.initActions(this, field);
             return;
         }
-        if(pos.x + dv.dx == target.x && pos.y + dv.dy == target.y) {
-            field.setObjectInSector(pos.x + dv.dx, pos.y + dv.dy, null);
+        if(nextPos.x == target.x && nextPos.y == target.y) {
+            field.setObjectInSector(nextPos.x, nextPos.y, null);
             cState = new ReturnToStartState();
         }
-        moveInSector(dv, field);
+        moveInSector(nextPos, field);
     }
 
     public void returnToStartPos(GameField field) {
-        DirectionVector dv = moveStrategy.nextMoveDirection(pos, policeStationPos, field);
-        moveInSector(dv, field);
+        Point nextPos = moveStrategy.nextPosition(pos, policeStationPos, field);
+        moveInSector(nextPos, field);
         if(pos.x == policeStationPos.x && pos.y == policeStationPos.y) {
             cState = new EnterStartPosState();
         }
@@ -70,6 +69,6 @@ public class Cop extends DirectedMovableObj implements ISeekerWithState {
     public void visit(Hobo hobo) {}
 
     public void accept(IFieldObj visitor) { visitor.visit(this); }
-    public void accept(RectGamePrinter printer) { printer.visit(this); }
+    public void accept(GamePrinter printer) { printer.visit(this); }
 
 }

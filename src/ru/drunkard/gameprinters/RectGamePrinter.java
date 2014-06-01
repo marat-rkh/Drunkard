@@ -1,4 +1,4 @@
-package ru.drunkard.game;
+package ru.drunkard.gameprinters;
 
 import ru.drunkard.field.GameField;
 import ru.drunkard.utility.Point;
@@ -6,7 +6,8 @@ import ru.drunkard.utility.Point;
 import java.util.Iterator;
 
 public class RectGamePrinter extends BasicGamePrinter {
-    protected RectGamePrinter(int fieldWidth, int fieldHeight) {
+
+    public RectGamePrinter(int fieldWidth, int fieldHeight) {
         super(fieldWidth, fieldHeight);
     }
 
