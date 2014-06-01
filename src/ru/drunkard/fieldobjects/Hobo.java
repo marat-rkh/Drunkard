@@ -6,6 +6,8 @@ import ru.drunkard.movestrategies.IDirectedMoveStrategy;
 import ru.drunkard.states.movableobjstate.*;
 import ru.drunkard.utility.Point;
 
+import java.util.List;
+
 public class Hobo extends DirectedMovableObj implements ISeekerWithState {
     private ISeekerState hState = new WaitingState();
     private final Point glassStationPos;
@@ -26,8 +28,10 @@ public class Hobo extends DirectedMovableObj implements ISeekerWithState {
         }
     }
     public void exitStartPos(GameField field) {
-        if(field.sectorIsEmpty(glassStationPos.x, glassStationPos.y)) {
-            field.setObjectInSector(glassStationPos.x, glassStationPos.y, this);
+        List<Point> availableExits = field.getFreeNeighbours(glassStationPos, null);
+        if(availableExits.size() != 0) {
+            pos = availableExits.get(0);
+            field.setObjectInSector(availableExits.get(0).x, availableExits.get(0).y, this);
             hState = new SeekingState();
         }
     }
@@ -48,10 +52,13 @@ public class Hobo extends DirectedMovableObj implements ISeekerWithState {
         moveInSector(nextPos, field);
     }
     public void returnToStartPos(GameField field) {
-        Point nextPos = moveStrategy.nextPosition(pos, glassStationPos, field);
-        moveInSector(nextPos, field);
-        if(pos.x == glassStationPos.x && pos.y == glassStationPos.y) {
-            hState = new EnterStartPosState();
+        List<Point> availableExits = field.getFreeNeighbours(glassStationPos, pos);
+        if(availableExits.size() != 0) {
+            Point nextPos = moveStrategy.nextPosition(pos, availableExits.get(0), field);
+            moveInSector(nextPos, field);
+            if (isNeighbourToStartPos(glassStationPos, field)) {
+                hState = new EnterStartPosState();
+            }
         }
     }
     public void enterStartPos(GameField field) {

@@ -15,6 +15,7 @@ public interface GameField {
     public void sendVisitorToSector(int x, int y, IFieldObj visitor);
     public void sendVisitorToSector(int x, int y, GamePrinter visitor);
 
+    public boolean pointIsOutOfBorders(Point p);
     public List<Point> getAllNeighbours(Point p);
     public List<Point> getFreeNeighbours(Point p, Point special);
     public Iterator<Point> getIterator(Point topleft, Point bottomright);

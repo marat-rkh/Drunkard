@@ -7,7 +7,7 @@ public class Point {
 
     @Override
     public boolean equals(Object other) {
-        if(other instanceof Point) {
+        if(other != null && other instanceof Point) {
             return x == ((Point)other).x && y == ((Point)other).y;
         }
         return false;

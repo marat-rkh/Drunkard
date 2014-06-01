@@ -49,11 +49,11 @@ public abstract class BasicGamePrinter implements GamePrinter {
     }
 
     protected void setFrameObject(Point pos, char symbol) {
-        if(pos.y == 0) {
+        if(pos.y == -1) {
             frameUpperPart.add(pos.x + 1, symbol);
-        } else if(pos.y == frameLeftPart.size() - 1) {
+        } else if(pos.y == frameLeftPart.size()) {
             frameBottomPart.add(pos.x + 1, symbol);
-        } else if(pos.x == 0) {
+        } else if(pos.x == -1) {
             frameLeftPart.add(pos.y, symbol);
         } else {
             frameRightPart.add(pos.y, symbol);

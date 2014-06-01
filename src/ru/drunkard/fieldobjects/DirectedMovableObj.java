@@ -5,6 +5,7 @@ import ru.drunkard.movestrategies.IDirectedMoveStrategy;
 import ru.drunkard.utility.Point;
 
 import java.util.Iterator;
+import java.util.List;
 
 abstract public class DirectedMovableObj extends MovableObj {
     protected IDirectedMoveStrategy moveStrategy;
@@ -29,5 +30,15 @@ abstract public class DirectedMovableObj extends MovableObj {
             }
         }
         return null;
+    }
+
+    protected boolean isNeighbourToStartPos(Point startPos, GameField field) {
+        List<Point> startPointNeighbours = field.getAllNeighbours(startPos);
+        for(Point n : startPointNeighbours) {
+            if(n.equals(pos)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -49,48 +49,17 @@ public class ShortestPathMoveStrategy implements IDirectedMoveStrategy {
         return !latestPath.isEmpty();
     }
 
-//    private List<Point> getAdjacentVertices(Point p, GameField field, Point special) {
-//        List<Point> adjacentVertices = new ArrayList<>();
-//        Point left = new Point(p.x - 1, p.y);
-//        if(left.x >= 0 && (left.equals(special) || field.sectorIsEmpty(left.x, left.y))) {
-//            adjacentVertices.add(left);
-//        }
-//        Point right = new Point(p.x + 1, p.y);
-//        if(right.x < field.getWidth() && (right.equals(special) || field.sectorIsEmpty(right.x, right.y))) {
-//            adjacentVertices.add(right);
-//        }
-//        Point upper = new Point(p.x, p.y - 1);
-//        if(upper.y >= 0 && (upper.equals(special) || field.sectorIsEmpty(upper.x, upper.y))) {
-//            adjacentVertices.add(upper);
-//        }
-//        Point lower = new Point(p.x, p.y + 1);
-//        if(lower.y < field.getHeight() && (lower.equals(special) || field.sectorIsEmpty(lower.x, lower.y))) {
-//            adjacentVertices.add(lower);
-//        }
-//        return adjacentVertices;
-//    }
-
     private void restorePath(Map<Point, BFSNodeInfo> nodesInfo, Point target) {
         latestPath.clear();
         Point current = target;
-        if(nodesInfo.get(current).predecessor == null) {
+        BFSNodeInfo currentInfo = nodesInfo.get(current);
+        if(currentInfo == null || currentInfo.predecessor == null) {
             return;
         }
-        BFSNodeInfo currentInfo = nodesInfo.get(current);
         while (!currentInfo.predecessor.equals(current)) {
             latestPath.push(current);
             current = currentInfo.predecessor;
             currentInfo = nodesInfo.get(current);
         }
     }
-
-//    private BFSNodeInfo[][] createNodesInfoArray(int lines, int columns) {
-//        BFSNodeInfo[][] nodesInfo = new BFSNodeInfo[lines][columns];
-//        for(int i = 0; i < lines; i++) {
-//            for(int j = 0; j < columns; j++) {
-//                nodesInfo[i][j] = new BFSNodeInfo();
-//            }
-//        }
-//        return nodesInfo;
-//    }
 }

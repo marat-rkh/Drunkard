@@ -49,6 +49,7 @@ public class GameController {
         gameField.addNewObject(createHobo());
         //debug
 //        debugCreateInitialObjects();
+//        debugCreateBlockingObjects();
     }
 
     public void startGame(int maxSteps, int delay, int stepsToSkip) {
@@ -139,5 +140,13 @@ public class GameController {
         Drunkard newDrunkard9 = new Drunkard(10, 4);
         gameField.setObjectInSector(10, 4, newDrunkard9);
         gameField.addNewObject(newDrunkard9);
+    }
+
+    private void debugCreateBlockingObjects() {
+        Column column = new Column();
+        gameField.setObjectInSector(14, 3, column);
+        gameField.setObjectInSector(14, 4, column);
+        gameField.setObjectInSector(0, 4, column);
+        gameField.setObjectInSector(0, 5, column);
     }
 }

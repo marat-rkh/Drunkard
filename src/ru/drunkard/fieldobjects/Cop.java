@@ -6,6 +6,8 @@ import ru.drunkard.movestrategies.IDirectedMoveStrategy;
 import ru.drunkard.states.movableobjstate.*;
 import ru.drunkard.utility.Point;
 
+import java.util.List;
+
 public class Cop extends DirectedMovableObj implements ISeekerWithState {
     private ISeekerState cState = new SeekingState();
     private final Point policeStationPos;
@@ -20,11 +22,13 @@ public class Cop extends DirectedMovableObj implements ISeekerWithState {
     public void waitSome(GameField field) {}
     public void exitStartPos(GameField field) {}
     public void seekTarget(GameField field) {
-        if(field.sectorIsEmpty(policeStationPos.x, policeStationPos.y)) {
+        List<Point> availableExits = field.getFreeNeighbours(policeStationPos, null);
+        if(availableExits.size() != 0) {
             Point target = tryFindTarget(field);
             if(target != null) {
                 cState = new TargetedState(target);
-                field.setObjectInSector(policeStationPos.x, policeStationPos.y, this);
+                pos = availableExits.get(0);
+                field.setObjectInSector(availableExits.get(0).x, availableExits.get(0).y, this);
             }
         }
     }
@@ -44,10 +48,13 @@ public class Cop extends DirectedMovableObj implements ISeekerWithState {
     }
 
     public void returnToStartPos(GameField field) {
-        Point nextPos = moveStrategy.nextPosition(pos, policeStationPos, field);
-        moveInSector(nextPos, field);
-        if(pos.x == policeStationPos.x && pos.y == policeStationPos.y) {
-            cState = new EnterStartPosState();
+        List<Point> availableExits = field.getFreeNeighbours(policeStationPos, pos);
+        if(availableExits.size() != 0) {
+            Point nextPos = moveStrategy.nextPosition(pos, availableExits.get(0), field);
+            moveInSector(nextPos, field);
+            if (isNeighbourToStartPos(policeStationPos, field)) {
+                cState = new EnterStartPosState();
+            }
         }
     }
 
@@ -70,5 +77,4 @@ public class Cop extends DirectedMovableObj implements ISeekerWithState {
 
     public void accept(IFieldObj visitor) { visitor.visit(this); }
     public void accept(GamePrinter printer) { printer.visit(this); }
-
 }

@@ -128,7 +128,8 @@ public abstract class BasicField implements GameField {
         }
     }
 
-    private boolean pointIsOutOfBorders(Point p) {
+    @Override
+    public boolean pointIsOutOfBorders(Point p) {
         return p.x >= width || p.y >= height || p.x < 0 || p.y < 0;
     }
 }

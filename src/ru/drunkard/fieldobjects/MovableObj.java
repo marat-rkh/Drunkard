@@ -8,12 +8,10 @@ abstract public class MovableObj implements IFieldObj {
 
     protected MovableObj(Point pos) { this.pos = pos; }
 
-//    protected boolean sectorIsEmpty(DirectionVector directionVector, GameField field) {
-//        return field.sectorIsEmpty(pos.x + directionVector.dx, pos.y + directionVector.dy);
-//    }
-
     public void moveInSector(Point destinationPos, GameField field) {
-        field.setObjectInSector(pos.x, pos.y, null);
+        if(!field.pointIsOutOfBorders(pos)) {
+            field.setObjectInSector(pos.x, pos.y, null);
+        }
         field.setObjectInSector(destinationPos.x, destinationPos.y, this);
         pos = destinationPos;
     }
