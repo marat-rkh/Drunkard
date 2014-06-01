@@ -1,27 +1,26 @@
 package ru.drunkard.fieldobjects;
 
-import ru.drunkard.field.Field;
-import ru.drunkard.game.GamePrinter;
+import ru.drunkard.field.GameField;
+import ru.drunkard.game.RectGamePrinter;
 import ru.drunkard.movestrategies.IDirectedMoveStrategy;
 import ru.drunkard.states.movableobjstate.*;
 import ru.drunkard.utility.DirectionVector;
-import ru.drunkard.utility.FieldArea;
 import ru.drunkard.utility.Point;
 
 public class Cop extends DirectedMovableObj implements ISeekerWithState {
     private ISeekerState cState = new SeekingState();
     private final Point policeStationPos;
 
-    public Cop(Point startPos, IDirectedMoveStrategy ms, FieldArea lampPostWA) {
-        super(startPos, ms, lampPostWA);
+    public Cop(Point startPos, IDirectedMoveStrategy ms, Point searchAreaStart, Point searchAreaEnd) {
+        super(startPos, ms, searchAreaStart, searchAreaEnd);
         policeStationPos = new Point(startPos.x, startPos.y);
     }
 
-    public void doActions(Field field) { cState.initActions(this, field); }
+    public void doActions(GameField field) { cState.initActions(this, field); }
 
-    public void waitSome(Field field) {}
-    public void exitStartPos(Field field) {}
-    public void seekTarget(Field field) {
+    public void waitSome(GameField field) {}
+    public void exitStartPos(GameField field) {}
+    public void seekTarget(GameField field) {
         if(field.sectorIsEmpty(policeStationPos.x, policeStationPos.y)) {
             Point target = tryFindTarget(field);
             if(target != null) {
@@ -31,7 +30,7 @@ public class Cop extends DirectedMovableObj implements ISeekerWithState {
         }
     }
 
-    public void goToTarget(Point target, Field field) {
+    public void goToTarget(Point target, GameField field) {
         DirectionVector dv = moveStrategy.nextMoveDirection(pos, target, field);
         if(dv.isZeroVector()) {
             cState = new ReturnToStartState();
@@ -45,7 +44,7 @@ public class Cop extends DirectedMovableObj implements ISeekerWithState {
         moveInSector(dv, field);
     }
 
-    public void returnToStartPos(Field field) {
+    public void returnToStartPos(GameField field) {
         DirectionVector dv = moveStrategy.nextMoveDirection(pos, policeStationPos, field);
         moveInSector(dv, field);
         if(pos.x == policeStationPos.x && pos.y == policeStationPos.y) {
@@ -53,7 +52,7 @@ public class Cop extends DirectedMovableObj implements ISeekerWithState {
         }
     }
 
-    public void enterStartPos(Field field) {
+    public void enterStartPos(GameField field) {
         field.setObjectInSector(pos.x, pos.y, null);
         cState = new SeekingState();
         hasTarget = false;
@@ -71,6 +70,6 @@ public class Cop extends DirectedMovableObj implements ISeekerWithState {
     public void visit(Hobo hobo) {}
 
     public void accept(IFieldObj visitor) { visitor.visit(this); }
-    public void accept(GamePrinter printer) { printer.visit(this); }
+    public void accept(RectGamePrinter printer) { printer.visit(this); }
 
 }

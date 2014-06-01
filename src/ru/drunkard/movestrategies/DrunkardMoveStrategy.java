@@ -1,6 +1,6 @@
 package ru.drunkard.movestrategies;
 
-import ru.drunkard.field.Field;
+import ru.drunkard.field.GameField;
 import ru.drunkard.utility.DirectionVector;
 import ru.drunkard.utility.Point;
 
@@ -8,9 +8,9 @@ import java.util.Random;
 
 public class DrunkardMoveStrategy implements IUndirectedMoveStrategy {
 
-    public DirectionVector nextMoveDirection(Point start, Field field) {
+    public DirectionVector nextMoveDirection(Point start, GameField field) {
         DirectionVector dv = getRandomDirection();
-        return outOfBorders(start.x, start.y, dv, field) ? DirectionVector.zero() : dv;
+        return field.pointIsOutOfBorders(start.x + dv.dx, start.y + dv.dy) ? DirectionVector.zero() : dv;
     }
 
     private DirectionVector getRandomDirection() {
@@ -22,11 +22,5 @@ public class DrunkardMoveStrategy implements IUndirectedMoveStrategy {
             int dy = generator.nextInt(2) == 0 ? -1 : 1;
             return new DirectionVector(0, dy);
         }
-    }
-
-    private boolean outOfBorders(int x, int y, DirectionVector directionVector, Field field) {
-        int new_x = x + directionVector.dx;
-        int new_y = y + directionVector.dy;
-        return new_x >= field.getWidth() || new_y >= field.getHeight() || new_x < 0 || new_y < 0;
     }
 }

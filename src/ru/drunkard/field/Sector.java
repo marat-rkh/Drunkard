@@ -1,7 +1,7 @@
 package ru.drunkard.field;
 
 import ru.drunkard.fieldobjects.IFieldObj;
-import ru.drunkard.game.GamePrinter;
+import ru.drunkard.game.RectGamePrinter;
 
 public class Sector {
     private IFieldObj object;
@@ -13,7 +13,7 @@ public class Sector {
     public void acceptVisitor(IFieldObj visitor) {
         if(object != null) { object.accept(visitor); }
     }
-    public void acceptVisitor(GamePrinter visitor) {
+    public void acceptVisitor(RectGamePrinter visitor) {
         if(object != null) { object.accept(visitor); }
     }
 }

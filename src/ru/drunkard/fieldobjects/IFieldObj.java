@@ -1,11 +1,11 @@
 package ru.drunkard.fieldobjects;
 
-import ru.drunkard.field.Field;
-import ru.drunkard.game.GamePrinter;
+import ru.drunkard.field.GameField;
+import ru.drunkard.game.RectGamePrinter;
 
 public interface IFieldObj {
 
-    public void doActions(Field field);
+    public void doActions(GameField field);
 
     public void visit(Drunkard drunkard);
     public void visit(Column column);
@@ -15,5 +15,5 @@ public interface IFieldObj {
     public void visit(Hobo hobo);
 
     public void accept(IFieldObj visitor);
-    public void accept(GamePrinter printer);
+    public void accept(RectGamePrinter printer);
 }

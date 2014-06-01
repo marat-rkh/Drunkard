@@ -1,7 +1,7 @@
 package ru.drunkard.fieldobjects;
 
-import ru.drunkard.field.Field;
-import ru.drunkard.game.GamePrinter;
+import ru.drunkard.field.GameField;
+import ru.drunkard.game.RectGamePrinter;
 import ru.drunkard.movestrategies.IUndirectedMoveStrategy;
 import ru.drunkard.utility.DirectionVector;
 import ru.drunkard.utility.Point;
@@ -15,7 +15,7 @@ public class Drunkard extends UndirectedMovableObj {
 
     public Drunkard(int x, int y, IUndirectedMoveStrategy ms) { super(new Point(x, y), ms); }
 
-    public void doActions(Field field) {
+    public void doActions(GameField field) {
         if(!isFallen && !isSleeping) {
             int xBeforeMoveTry = pos.x;
             int yBeforeMoveTry = pos.y;
@@ -45,9 +45,9 @@ public class Drunkard extends UndirectedMovableObj {
     public void visit(Hobo hobo) {}
 
     public void accept(IFieldObj visitor) { visitor.visit(this); }
-    public void accept(GamePrinter printer) { printer.visit(this); }
+    public void accept(RectGamePrinter printer) { printer.visit(this); }
 
-    private void tryDropBottle(int xOld, int yOld, Field field) {
+    private void tryDropBottle(int xOld, int yOld, GameField field) {
         if(bottle != null) {
             if(Math.random() < BOTTLE_DROP_CHANCE) {
                 Bottle bottleCopy = new Bottle();
