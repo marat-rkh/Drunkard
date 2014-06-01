@@ -11,20 +11,22 @@ import ru.drunkard.movestrategies.IDirectedMoveStrategy;
 import ru.drunkard.movestrategies.ShortestPathMoveStrategy;
 import ru.drunkard.utility.Point;
 
+import java.util.List;
+
 public class GameController {
     private final int FIELD_HEIGHT = 15;
     private final int FIELD_WIDTH = 15;
     private final int TAVERN_X = 9;
-    private final int TAVERN_Y = 0;
+    private final int TAVERN_Y = -1;
     private final int COLUMN_X = 7;
     private final int COLUMN_Y = 7;
     private final int DRUNKARD_GENERATION_STEP = 20;
     private final int LAMPPOST_X = 10;
     private final int LAMPPOST_Y = 3;
     private final int LAMPPOST_LIGHT_AREA_RADIUS = 3;
-    private final int POLICE_STATION_X = 14;
+    private final int POLICE_STATION_X = 15;
     private final int POLICE_STATION_Y = 3;
-    private final int GLASS_STATION_X = 0;
+    private final int GLASS_STATION_X = -1;
     private final int GLASS_STATION_Y = 4;
 
     private GameField gameField = null;
@@ -46,7 +48,7 @@ public class GameController {
         gameField.addNewObject(createCop());
         gameField.addNewObject(createHobo());
         //debug
-        //debugCreateInitialObjects();
+//        debugCreateInitialObjects();
     }
 
     public void startGame(int maxSteps, int delay, int stepsToSkip) {
@@ -87,9 +89,10 @@ public class GameController {
     }
 
     private void tryGenerateDrunkard() {
-        if(gameField.sectorIsEmpty(TAVERN_X, TAVERN_Y)) {
-            Drunkard newDrunkard = new Drunkard(TAVERN_X, TAVERN_Y);
-            gameField.setObjectInSector(TAVERN_X, TAVERN_Y, newDrunkard);
+        List<Point> availableExits = gameField.getFreeNeighbours(new Point(TAVERN_X, TAVERN_Y), null);
+        if(availableExits.size() != 0) {
+            Drunkard newDrunkard = new Drunkard(availableExits.get(0).x, availableExits.get(0).y);
+            gameField.setObjectInSector(availableExits.get(0).x, availableExits.get(0).y, newDrunkard);
             gameField.addNewObject(newDrunkard);
         }
     }
